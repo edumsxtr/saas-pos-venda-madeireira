@@ -2,17 +2,19 @@ FROM node:18-alpine as build
 
 WORKDIR /app
 
-# Copiar package.json
+# Copiar package.json e pnpm-lock.yaml
 COPY package*.json ./
+COPY pnpm-lock.yaml ./
 
-# Instalar dependências
-RUN npm install
+# Instalar pnpm e dependências
+RUN npm install -g pnpm
+RUN pnpm install
 
 # Copiar código
 COPY . .
 
 # Build da aplicação
-RUN npm run build
+RUN pnpm run build
 
 # Nginx para servir os arquivos
 FROM nginx:alpine
